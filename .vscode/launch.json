@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "send mails",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "--csv=data/Mitgliederliste_28.3.24.csv",
+                "--template=data/mail.txt",
+                "--subject=Wichtig! Bietrunde Spörgelhof eG",
+                "--bcc=zenogries@gmail.com"
+            ],
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "send mails test",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "main.py",
+            "args": [
+                "--csv=data/test.csv",
+                "--template=data/mail.txt",
+                "--subject=Wichtig! Bietrunde Spörgelhof eG",
+                "--bcc=t.babel@gmx.com"
+            ],
+            "console": "integratedTerminal"
+        }
+    ]
+}
