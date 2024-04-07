@@ -1,3 +1,5 @@
+from typing import TextIO
+
 import click
 import tqdm
 import time
@@ -10,10 +12,10 @@ from email.mime.text import MIMEText
 
 @click.command()
 @click.option("--csv", type=click.Path(exists=True, dir_okay=False))
-@click.option("--template", type=click.Path(exists=True, dir_okay=False))
+@click.option("--template", type=click.File("r"))
 @click.option("--subject", type=str)
 @click.option("--bcc", type=str, required=False)
-def send_mails(csv: str, template: str, subject: str, bcc: str | None) -> None:
+def send_mails(csv: str, template: TextIO, subject: str, bcc: str | None) -> None:
     config = dotenv_values(".env")
     table = pd.read_csv(csv)
 
@@ -29,30 +31,29 @@ def send_mails(csv: str, template: str, subject: str, bcc: str | None) -> None:
         for index, mail in tqdm.tqdm(
             zip(table.index, table[config["mail_column"]]), total=table.shape[0]
         ):
-            with open(template) as t:
-                text = t.read()
-                subbed_text = re.sub(
-                    r"\{(.+)\}", lambda x: str(table.at[index, x.group(1)]), text
+            text = template.read()
+            subbed_text = re.sub(
+                r"\{(.+)\}", lambda x: str(table.at[index, x.group(1)]), text
+            )
+
+            # compose mail
+            msg = MIMEText(subbed_text, "plain")
+            msg["Subject"] = subject
+            msg["From"] = config["sender"]
+            if bcc:
+                msg["Bcc"] = bcc
+
+            try:
+                conn.sendmail(
+                    config["sender"],
+                    [mail, bcc] if bcc else mail,
+                    msg.as_string(),
                 )
+            except:
+                print(f"could not send message to {mail}")
+                not_sent.append(mail)
 
-                # compose mail
-                msg = MIMEText(subbed_text, "plain")
-                msg["Subject"] = subject
-                msg["From"] = config["sender"]
-                if bcc is not None:
-                    msg["Bcc"] = bcc
-
-                try:
-                    conn.sendmail(
-                        config["sender"],
-                        mail if bcc is None else [mail, bcc],
-                        msg.as_string(),
-                    )
-                except:
-                    print(f"could not send message to {mail}")
-                    not_sent.append(mail)
-
-                time.sleep(3)
+            time.sleep(3)
 
     conn.quit()
 
