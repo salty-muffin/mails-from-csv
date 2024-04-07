@@ -15,7 +15,7 @@
             "name": "send mails",
             "type": "debugpy",
             "request": "launch",
-            "program": "main.py",
+            "program": "send_mails.py",
             "args": [
                 "--csv=data/Mitgliederliste_28.3.24.csv",
                 "--template=data/mail.txt",
@@ -28,7 +28,7 @@
             "name": "send mails test",
             "type": "debugpy",
             "request": "launch",
-            "program": "main.py",
+            "program": "send_mails.py",
             "args": [
                 "--csv=data/test.csv",
                 "--template=data/mail.txt",
