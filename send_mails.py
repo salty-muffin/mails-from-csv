@@ -10,12 +10,17 @@ from dotenv import dotenv_values
 from email.mime.text import MIMEText
 
 
+def read_textfile(path: str) -> str:
+    with open(path, "r") as file:
+        return file.read()
+
+
 @click.command()
 @click.option("--csv", type=click.Path(exists=True, dir_okay=False))
-@click.option("--template", type=click.File("r"))
+@click.option("--template", type=read_textfile)
 @click.option("--subject", type=str)
 @click.option("--bcc", type=str, required=False)
-def send_mails(csv: str, template: TextIO, subject: str, bcc: str | None) -> None:
+def send_mails(csv: str, template: str, subject: str, bcc: str | None) -> None:
     config = dotenv_values(".env")
     table = pd.read_csv(csv)
 
@@ -31,13 +36,12 @@ def send_mails(csv: str, template: TextIO, subject: str, bcc: str | None) -> Non
         for index, mail in tqdm.tqdm(
             zip(table.index, table[config["mail_column"]]), total=table.shape[0]
         ):
-            text = template.read()
-            subbed_text = re.sub(
-                r"\{(.+)\}", lambda x: str(table.at[index, x.group(1)]), text
+            text = re.sub(
+                r"\{(.+)\}", lambda x: str(table.at[index, x.group(1)]), template
             )
 
             # compose mail
-            msg = MIMEText(subbed_text, "plain")
+            msg = MIMEText(text, "plain")
             msg["Subject"] = subject
             msg["From"] = config["sender"]
             if bcc:
