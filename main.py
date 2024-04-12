@@ -39,10 +39,10 @@ def send_mails(
     except:
         print(f"could not establish connection to {config['smtp_server']}")
     else:
+        text = template.read()
         for index, mail in tqdm.tqdm(
             zip(table.index, table[mail_column]), total=table.shape[0]
         ):
-            text = template.read()
             subbed_text = re.sub(
                 r"\{(.+)\}", lambda x: str(table.at[index, x.group(1)]), text
             )
