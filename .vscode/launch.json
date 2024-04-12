@@ -17,10 +17,12 @@
             "request": "launch",
             "program": "main.py",
             "args": [
-                "--csv=data/Mitgliederliste_28.3.24.csv",
-                "--template=data/mail.txt",
+                "--csv=data/240328_Mitgliederliste.csv",
+                "--mail_column=E-Mail",
+                "--template=data/240412_Bietrunde_Erinnerung.txt",
                 "--subject=Wichtig! Bietrunde Spörgelhof eG",
-                "--bcc=zenogries@gmail.com"
+                "--bcc=zenogries@gmail.com",
+                "--interval=3"
             ],
             "console": "integratedTerminal"
         },
@@ -31,9 +33,11 @@
             "program": "main.py",
             "args": [
                 "--csv=data/test.csv",
-                "--template=data/mail.txt",
+                "--mail_column=E-Mail",
+                "--template=data/240412_Bietrunde_Erinnerung.txt",
                 "--subject=Wichtig! Bietrunde Spörgelhof eG",
-                "--bcc=t.babel@gmx.com"
+                "--bcc=t.babel@gmx.com",
+                "--interval=3"
             ],
             "console": "integratedTerminal"
         }
