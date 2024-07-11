@@ -11,7 +11,7 @@ required python >= 3.9.x
 1. create a virtual environment with `python3 -m venv .venv`
 2. enter the environemt with `source .venv/bin/activate`
 3. install the depenencies into a virtual environment with `python3 -m pip install -r requirements.txt`
-4. create the .env file from the provided sample_dotenv file and provide the necessary data
+4. create the '.env' file from the provided sample_dotenv file and provide the necessary data
 
 ## run
 
